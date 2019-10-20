@@ -11,12 +11,13 @@
           <label>Task Name</label>
           <input type="text" class="form-control" v-model="taskname">
         </div>
-        <button class="btn btn-primary" @click="sendToDo">Add To Do</button>
+        <button class="btn btn-primary" id="btn_add_todo" disabled="true" @click="sendToDo">Add To Do</button>
+        <br><br>
         <ul class="list-group">
           <li class="list-group-item" v-for="t in tasks" :key="t.item" :id=t.id>
-              <button type="button" class="btn btn-danger btn-sm">delete</button>
+              <button type="button" class="btn btn-danger btn-sm" @click="deleteTask">delete</button>
               <input type="text" class="form-control" :placeholder=t.name>
-              <button type="button" class="btn btn-info btn-sm">Modify</button>
+              <button type="button" class="btn btn-info btn-sm" @click="modifyTask">Modify</button>
           </li>
         </ul>
       </div>
@@ -46,10 +47,14 @@ export default {
               }).then(data => {
         this.user_id = data['id'];
         document.getElementById('user_id_btn').disabled = true;
+        document.getElementById('btn_add_todo').disabled = false;
       })
     },
     sendToDo () {
-
+      if(this.taskname==''){
+        alert("Le champ Task Name ... ne doit pas être vide");
+        return;
+      }
       this.$http.post('https://glo3102lab4.herokuapp.com/' + this.user_id + '/tasks', {"name":this.taskname})
               .then(response => {
                 return response.json();
@@ -58,9 +63,36 @@ export default {
         // eslint-disable-next-line no-console
         console.log(this.tasks);
       })
-    }
+    },
+    deleteTask (event) {
+      let task_id = event.target.parentNode.id;
+      let index_found = this.tasks.findIndex((element) => element.id == task_id);
+
+      this.tasks.splice(index_found, 1);
+
+      this.$http.delete('https://glo3102lab4.herokuapp.com/' + this.user_id + '/tasks/' + task_id);
+      document.getElementById(task_id).remove();
+    },
+
+    modifyTask (event) {
+        let task_id = event.target.parentNode.id;
+        let my_li = document.getElementById(task_id);
+        let new_text = my_li.getElementsByTagName('input')[0].value;
+        if(new_text==""){
+            alert("Le champ Todo Modif... ne doit pas être vide");
+            return;
+        }
+        my_li.getElementsByTagName('input')[0].value = '';
+        my_li.getElementsByTagName('input')[0].placeholder = new_text;
+        this.$http.put('https://glo3102lab4.herokuapp.com/' + this.user_id + '/tasks/' + task_id, {"name": new_text});
+        let index_found = this.tasks.findIndex((element) => element.id == task_id);
+        this.tasks[index_found].name = new_text;
+    },
   }
 }
+
+
+
 </script>
 
 <style>
