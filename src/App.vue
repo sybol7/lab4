@@ -66,12 +66,9 @@ export default {
     },
     deleteTask (event) {
       let task_id = event.target.parentNode.id;
-      let index_found = this.tasks.findIndex((element) => element.id == task_id);
-
-      this.tasks.splice(index_found, 1);
-
       this.$http.delete('https://glo3102lab4.herokuapp.com/' + this.user_id + '/tasks/' + task_id);
-      document.getElementById(task_id).remove();
+      let index_found = this.tasks.findIndex((element) => element.id === task_id);
+      this.tasks.splice(index_found, 1);
     },
 
     modifyTask (event) {
@@ -85,7 +82,7 @@ export default {
         my_li.getElementsByTagName('input')[0].value = '';
         my_li.getElementsByTagName('input')[0].placeholder = new_text;
         this.$http.put('https://glo3102lab4.herokuapp.com/' + this.user_id + '/tasks/' + task_id, {"name": new_text});
-        let index_found = this.tasks.findIndex((element) => element.id == task_id);
+        let index_found = this.tasks.findIndex((element) => element.id === task_id);
         this.tasks[index_found].name = new_text;
     },
   }
