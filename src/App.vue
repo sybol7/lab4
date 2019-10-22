@@ -51,6 +51,7 @@ export default {
         document.getElementById('btn_add_todo').disabled = false;
       })
     },
+
     sendToDo () {
       if (this.taskname === '') {
         alert("Le champ Task Name ... ne doit pas être vide");
@@ -84,7 +85,7 @@ export default {
     },
 
     modifyTask (event) {
-        // récupère le texte du input associé au bon <li>
+        // récupère le texte du input associé au bon <div>
         let task_id = event.target.parentNode.id;
         let my_li = document.getElementById(task_id);
         let new_text = my_li.getElementsByTagName('input')[0].value;
