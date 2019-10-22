@@ -13,13 +13,14 @@
         </div>
         <button class="btn btn-primary" id="btn_add_todo" disabled='true' @click="sendToDo">Add To Do</button>
         <br><br>
-        <ul class="list-group">
-          <li class="list-group-item" v-for="t in tasks" :key="t.item" :id=t.id>
-              <button type="button" class="btn btn-danger btn-sm" @click="deleteTask">delete</button>
-              <input type="text" class="form-control" :placeholder=t.name>
-              <button type="button" class="btn btn-info btn-sm" @click="modifyTask">Modify</button>
-          </li>
-        </ul>
+
+          <template class="list-group-item" v-for="t in tasks">
+            <div :key="t.item" class="tasks-group" :id=t.id>
+              <button :key="t.item" type="button" class="btn btn-danger btn-sm" @click="deleteTask">delete</button>
+              <input :key="t.item" type="text" class="form-control" :placeholder=t.name>
+              <button :key="t.item" type="button" class="btn btn-info btn-sm" @click="modifyTask">Modify</button>
+            </div>
+          </template>
       </div>
     </div>
   </div>
@@ -108,4 +109,12 @@ export default {
 </script>
 
 <style>
+  .tasks-group {
+    margin-bottom: 5px;
+    display: flex;
+  }
+  .btn {
+    margin-left: 3px;
+    margin-right: 3px;
+  }
 </style>
